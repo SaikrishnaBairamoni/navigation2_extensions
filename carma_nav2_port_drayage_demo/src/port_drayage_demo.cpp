@@ -77,18 +77,25 @@ PortDrayageDemo::PortDrayageDemo(const rclcpp::NodeOptions & options)
 : rclcpp_lifecycle::LifecycleNode("port_drayage_demo", options)
 {
   declare_parameter("cmv_id", rclcpp::ParameterValue(std::string("")));
+  declare_parameter("standard_route", rclcpp::ParameterValue(std::string("")));
+  declare_parameter("inspection_route", rclcpp::ParameterValue(std::string("")));
 }
 
 auto PortDrayageDemo::on_configure(const rclcpp_lifecycle::State & /* state */)
   -> nav2_util::CallbackReturn
 {
   get_parameter("cmv_id", cmv_id_);
+  get_parameter("standard_route", standard_route_filepath_);
+  get_parameter("inspection_route", inspection_route_filepath_);
 
   clock_ = get_clock();
 
   follow_waypoints_client_ = rclcpp_action::create_client<nav2_msgs::action::FollowWaypoints>(
     get_node_base_interface(), get_node_graph_interface(), get_node_logging_interface(),
     get_node_waitables_interface(), "follow_waypoints");
+
+  set_route_graph_client_ = create_client<nav2_msgs::srv::SetRouteGraph>(
+    "route_server/set_route_graph");
 
   mobility_operation_subscription_ = create_subscription<carma_v2x_msgs::msg::MobilityOperation>(
     "incoming_mobility_operation", 1, [this](const carma_v2x_msgs::msg::MobilityOperation & msg) {
@@ -132,6 +139,25 @@ auto PortDrayageDemo::on_mobility_operation_received(
     return;
   }
   if (!extract_port_drayage_message(msg)) return;
+  // Switch route graph to use inspection lane if needed
+  if (previous_mobility_operation_msg_.operation->getOperationID() == OperationID::Operation::PORT_CHECKPOINT)
+  {
+    while (!set_route_graph_client_->wait_for_service(std::chrono::seconds(1))) {
+      if (!rclcpp::ok()) {
+        RCLCPP_ERROR(get_logger(), "Interrupted while waiting for set route graph service. Exiting.");
+        return;
+      }
+      RCLCPP_INFO(get_logger(), "Set route graph service not available, waiting again...");
+    }
+    auto request = std::make_shared<nav2_msgs::srv::SetRouteGraph::Request>();
+    request->graph_filepath = inspection_route_filepath_;
+    auto result = set_route_graph_client_->async_send_request(request);
+    while (result.get()->success) {
+      RCLCPP_ERROR(get_logger(), "Changing route graph failed, retrying...");
+      auto result = set_route_graph_client_->async_send_request(request);
+    }
+  }
+
   nav2_msgs::action::FollowWaypoints::Goal goal;
 
   geometry_msgs::msg::PoseStamped pose;
@@ -157,6 +183,24 @@ auto PortDrayageDemo::on_result_received(
       carma_v2x_msgs::msg::MobilityOperation result = compose_arrival_message();
       mobility_operation_publisher_->publish(std::move(result));
       actively_executing_operation_ = false;
+      // Switch route graph back to standard route after exiting port
+      if (previous_mobility_operation_msg_.operation->getOperationID() == OperationID::Operation::EXIT_PORT) 
+      {
+        while (!set_route_graph_client_->wait_for_service(std::chrono::seconds(1))) {
+          if (!rclcpp::ok()) {
+            RCLCPP_ERROR(get_logger(), "Interrupted while waiting for set route graph service. Exiting.");
+            return;
+          }
+          RCLCPP_INFO(get_logger(), "Set route graph service not available, waiting again...");
+        }
+        auto request = std::make_shared<nav2_msgs::srv::SetRouteGraph::Request>();
+        request->graph_filepath = standard_route_filepath_;
+        auto result = set_route_graph_client_->async_send_request(request);
+        while (!result.get()->success) {
+          RCLCPP_ERROR(get_logger(), "Changing route graph failed, retrying...");
+          auto result = set_route_graph_client_->async_send_request(request);
+        }
+      }
       return;
     }
     case rclcpp_action::ResultCode::ABORTED:

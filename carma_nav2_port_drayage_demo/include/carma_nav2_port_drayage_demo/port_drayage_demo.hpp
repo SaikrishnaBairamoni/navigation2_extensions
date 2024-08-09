@@ -19,11 +19,13 @@
 #include <geometry_msgs/msg/pose_with_covariance_stamped.hpp>
 #include <memory>
 #include <nav2_msgs/action/follow_waypoints.hpp>
+#include <nav2_msgs/srv/set_route_graph.hpp>
 #include <nav2_util/lifecycle_node.hpp>
 #include <nlohmann/json.hpp>
 #include <rclcpp_action/rclcpp_action.hpp>
 #include <rclcpp_lifecycle/lifecycle_node.hpp>
 #include <string>
+#include <chrono>
 
 namespace carma_nav2_port_drayage_demo
 {
@@ -200,6 +202,12 @@ private:
   rclcpp_action::Client<nav2_msgs::action::FollowWaypoints>::SharedPtr follow_waypoints_client_{
     nullptr};
 
+  ////
+  // Service Client
+  ////
+  rclcpp::Client<nav2_msgs::srv::SetRouteGraph>::SharedPtr set_route_graph_client_{
+    nullptr};
+
   // Current odometry
   geometry_msgs::msg::PoseWithCovarianceStamped current_odometry_;
   // Vehicle identifier
@@ -212,6 +220,10 @@ private:
   rclcpp::Clock::SharedPtr clock_;
   // Previously received Mobility Operation message
   PortDrayageMobilityOperationMsg previous_mobility_operation_msg_;
+  // Filepath to standard route
+  std::string standard_route_filepath_;
+  // Filepath to inspection route
+  std::string inspection_route_filepath_;
 };
 }  // namespace carma_nav2_port_drayage_demo
 
