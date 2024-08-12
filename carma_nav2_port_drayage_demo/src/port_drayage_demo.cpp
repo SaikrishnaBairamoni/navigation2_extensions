@@ -151,11 +151,7 @@ auto PortDrayageDemo::on_mobility_operation_received(
     }
     auto request = std::make_shared<nav2_msgs::srv::SetRouteGraph::Request>();
     request->graph_filepath = inspection_route_filepath_;
-    auto result = set_route_graph_client_->async_send_request(request);
-    while (result.get()->success) {
-      RCLCPP_ERROR(get_logger(), "Changing route graph failed, retrying...");
-      auto result = set_route_graph_client_->async_send_request(request);
-    }
+    set_route_graph_client_->async_send_request(request);
   }
 
   nav2_msgs::action::FollowWaypoints::Goal goal;
