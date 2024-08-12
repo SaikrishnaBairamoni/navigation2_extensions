@@ -140,7 +140,7 @@ auto PortDrayageDemo::on_mobility_operation_received(
   }
   if (!extract_port_drayage_message(msg)) return;
   // Switch route graph to use inspection lane if needed
-  if (previous_mobility_operation_msg_.operation->getOperationID() == OperationID::Operation::PORT_CHECKPOINT)
+  if (previous_mobility_operation_msg_.operation->getOperationID() == OperationID::Operation::HOLDING_AREA)
   {
     while (!set_route_graph_client_->wait_for_service(std::chrono::seconds(1))) {
       if (!rclcpp::ok()) {
