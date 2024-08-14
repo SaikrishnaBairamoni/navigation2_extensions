@@ -156,7 +156,13 @@ auto PortDrayageDemo::on_mobility_operation_received(
     }
     auto request = std::make_shared<nav2_msgs::srv::SetRouteGraph::Request>();
     request->graph_filepath = inspection_route_filepath_;
-    set_route_graph_client_->async_send_request(request);
+    auto result = set_route_graph_client_->async_send_request(request);
+    if (rclcpp::spin_until_future_complete(get_node_base_interface(), result) !=
+    rclcpp::FutureReturnCode::SUCCESS)
+    {
+      RCLCPP_ERROR(get_logger(), "Failed to set route graph to inspection route");
+    }
+
   }
 
   nav2_msgs::action::FollowWaypoints::Goal goal;
@@ -197,9 +203,10 @@ auto PortDrayageDemo::on_result_received(
         auto request = std::make_shared<nav2_msgs::srv::SetRouteGraph::Request>();
         request->graph_filepath = standard_route_filepath_;
         auto result = set_route_graph_client_->async_send_request(request);
-        while (!result.get()->success) {
-          RCLCPP_ERROR(get_logger(), "Changing route graph failed, retrying...");
-          auto result = set_route_graph_client_->async_send_request(request);
+        if (rclcpp::spin_until_future_complete(get_node_base_interface(), result) !=
+        rclcpp::FutureReturnCode::SUCCESS)
+        {
+          RCLCPP_ERROR(get_logger(), "Failed to set route graph to standard route");
         }
       }
       return;
