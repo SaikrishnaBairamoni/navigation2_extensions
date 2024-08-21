@@ -34,13 +34,13 @@ jobs:
       run: |
         chmod +x ./install_dependencies.sh
         ./install_dependencies.sh
-      working-directory: /__w/navigation2_extensions/navigation2_extensions
+      working-directory: /__w/navigation2_extensions/navigation2_extensions/src/navigation2_extensions
           
     - name: Build 
       run: |
         chmod +x ./build.sh
         ./build.sh
-      working-directory: /__w/navigation2_extensions/navigation2_extensions  
+      working-directory: /__w/navigation2_extensions/navigation2_extensions/src/navigation2_extensions 
 
     - name: Run tests
       run: |
