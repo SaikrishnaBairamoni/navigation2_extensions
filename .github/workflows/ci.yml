@@ -19,25 +19,26 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
       with:
-        path: ros_ws/src/
-    - run: ls -la && pwd
+        path: ros_ws/src/navigation2_extensions 
+    - run: ls -la && pwd    
+
     - name: Install dependencies using script
       run: ./install_dependencies.sh
-      working-directory: /ros_ws/src/navigation2_extensions
+      working-directory: /github/workspace/ros_ws/src/navigation2_extensions 
 
     - name: Build using script
       run: ./build.sh
-      working-directory: /github/workspace/ros_ws/src/navigation2_extensions
+      working-directory: /github/workspace/ros_ws/src/navigation2_extensions  
 
     - name: Run tests
       run: |
         source /opt/ros/humble/setup.bash
         colcon test --packages-select carma_nav2_behavior_tree carma_nav2_emergency_stop carma_nav2_port_drayage_demo
         colcon test-result --verbose
-      working-directory: /github/workspace/ros_ws/src/navigation2_extensions
+      working-directory: /github/workspace/ros_ws/src/navigation2_extensions  
 
     - name: Run SonarScanner
       uses: usdot-fhwa-stol/actions/sonar-scanner@main
       with:
         sonar-token: ${{ secrets.SONAR_TOKEN }}
-        working-dir: /github/workspace/ros_ws/src/navigation2_extensions
+        working-dir: /github/workspace/ros_ws/src/navigation2_extensions  
