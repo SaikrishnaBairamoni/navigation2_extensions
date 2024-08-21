@@ -5,4 +5,4 @@ apt update
 # Install 
 apt install -y libnanoflann-dev
 rosdep update
-rosdep install --from-paths /root/c1t_ws/ --ignore-src -y
+rosdep install --from-paths src --ignore-src --rosdistro=humble -y -r
