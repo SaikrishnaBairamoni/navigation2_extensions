@@ -20,7 +20,7 @@ jobs:
       uses: actions/checkout@v4
       with:
         path: ros_ws/src/navigation2_extensions 
-    - run: cd ros_ws && ls -la && pwd    
+    - run: cd ros_ws/src && ls -la && pwd    
 
     - name: Install dependencies using script
       run: ./install_dependencies.sh
