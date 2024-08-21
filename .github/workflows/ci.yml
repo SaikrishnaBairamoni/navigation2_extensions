@@ -19,7 +19,7 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
       with:
-        path: ros_ws/src/navigation2_extensions
+        path: ros_ws/src/
 
     - name: Install dependencies using script
       run: ./install_dependencies.sh
