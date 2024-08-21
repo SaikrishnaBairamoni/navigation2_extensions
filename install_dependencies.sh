@@ -2,7 +2,7 @@
 set -e 
 
 apt update
-#d /__w/navigation2_extensions/navigation2_extensions
+cd /__w/navigation2_extensions/navigation2_extensions
 # Install 
 apt install -y libnanoflann-dev
 rosdep update
