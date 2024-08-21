@@ -18,6 +18,9 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        path: src/${{ github.event.repository.name }}
     
     - run: ls -la && pwd
 
@@ -25,19 +28,19 @@ jobs:
       run: |
         git clone https://github.com/usdot-fhwa-stol/carma-msgs
         git clone -b nav2_route_server_humble https://github.com/usdot-fhwa-stol/navigation2
-      working-directory: /__w/navigation2_extensions/navigation2_extensions/src  
+      working-directory: /__w/navigation2_extensions/navigation2_extensions/src
          
     - name: Install Ros dependencies
       run: |
         chmod +x ./install_dependencies.sh
         ./install_dependencies.sh
-      working-directory: /__w/navigation2_extensions/navigation2_extensions
+      working-directory: /__w/navigation2_extensions/navigation2_extensions/src/navigation2_extensions
           
     - name: Build 
       run: |
         chmod +x ./build.sh
         ./build.sh
-      working-directory: /__w/navigation2_extensions/navigation2_extensions  
+      working-directory: /__w/navigation2_extensions/navigation2_extensions/src/navigation2_extensions 
 
     - name: Run tests
       run: |
