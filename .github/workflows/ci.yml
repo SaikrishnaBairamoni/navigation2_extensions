@@ -23,7 +23,7 @@ jobs:
         path: src/${{ github.event.repository.name }}
         
     - name: Move source code
-      run: mv $GITHUB_WORKSPACE/src/${{ github.event.repository.name }} /root/c1t_ws/    
+      run: mv $GITHUB_WORKSPACE/src /root/c1t_ws/ 
     
     - run: ls -la && pwd
 
