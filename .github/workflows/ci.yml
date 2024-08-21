@@ -18,13 +18,12 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
-      with:
-        path: ros_ws/src/navigation2_extensions 
-    - run: cd ros_ws/src/navigation2_extensions && ls -la && pwd    
 
+    - run: ls -la && pwd    
+         
     - name: Install dependencies using script
       run: ./install_dependencies.sh
-      working-directory: /__w/navigation2_extensions/navigation2_extensions/ros_ws/src/navigation2_extensions
+      working-directory: /__w/navigation2_extensions/navigation2_extensions
 
     - name: Build using script
       run: ./build.sh
