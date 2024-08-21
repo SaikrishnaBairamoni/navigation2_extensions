@@ -22,8 +22,8 @@ jobs:
         path: ros_ws/src/
 
     - name: Install dependencies using script
-      run: ./install_dependencies.sh
-      working-directory: /github/workspace/ros_ws/src/navigation2_extensions
+      run: ls -la && pwd && ./install_dependencies.sh
+      working-directory: /ros_ws/src/navigation2_extensions
 
     - name: Build using script
       run: ./build.sh
