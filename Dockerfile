@@ -1,18 +1,3 @@
-#  Copyright (C) 2024 LEIDOS.
-#
-#  Licensed under the Apache License, Version 2.0 (the "License"); you may not
-#  use this file except in compliance with the License. You may obtain a copy of
-#  the License at
-#
-#  http://www.apache.org/licenses/LICENSE-2.0
-#
-#  Unless required by applicable law or agreed to in writing, software
-#  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
-#  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
-#  License for the specific language governing permissions and limitations under
-#  the License.
-
-# NAV2 extensions build file
 # Use ROS Humble as the base image
 FROM ros:humble-ros-base
 
@@ -31,17 +16,13 @@ RUN git clone https://github.com/usdot-fhwa-stol/carma-msgs && \
     git clone -b nav2_route_server_humble https://github.com/usdot-fhwa-stol/navigation2
 
 COPY . /root/c1t_ws/src/navigation2_extensions/
-COPY install_dependencies.sh /root/c1t_ws/
-COPY build.sh /root/c1t_ws/
+COPY docker/install_dependencies.sh /root/c1t_ws/
+COPY docker/build.sh /root/c1t_ws/
 
 WORKDIR /root/c1t_ws/
 
-# Run installation script
-RUN chmod +x ./install_dependencies.sh
+RUN chmod +x ./install_dependencies.sh ./build.sh
 RUN ./install_dependencies.sh
-
-# Run build script
-RUN chmod +x ./build.sh
 RUN ./build.sh
 
 LABEL org.label-schema.schema-version="1.0" \
@@ -54,5 +35,4 @@ LABEL org.label-schema.schema-version="1.0" \
       org.label-schema.vcs-ref="${VCS_REF}" \
       org.label-schema.build-date="${BUILD_DATE}"
 
-# Set entrypoint
 ENTRYPOINT ["/bin/bash"]

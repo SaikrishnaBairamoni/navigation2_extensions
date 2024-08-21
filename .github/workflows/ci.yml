@@ -29,11 +29,11 @@ jobs:
 
     - name: Install dependencies using script
       run: ./install_dependencies.sh
-      working-directory: /github/workspace/ros_ws
+      working-directory: /github/workspace/ros_ws/src/navigation2_extensions/docker
 
     - name: Build using script
       run: ./build.sh
-      working-directory: /github/workspace/ros_ws
+      working-directory: /github/workspace/ros_ws/src/navigation2_extensions/docker
 
     - name: Run tests
       run: |
