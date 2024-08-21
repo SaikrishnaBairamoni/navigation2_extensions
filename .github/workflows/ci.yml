@@ -1,0 +1,49 @@
+name: Navigation2_extensions_CI
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  push:
+    branches: 
+      - develop
+      - master
+      - "release/*"
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    container: 
+      image: ros:humble-ros-base
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        path: ros_ws/src/navigation2_extensions
+
+    - name: Set up environment
+      run: |
+        apt-get update && apt-get install -y python3-colcon-common-extensions python3-rosdep
+        rosdep init
+        rosdep update
+
+    - name: Install dependencies using script
+      run: ./install_dependencies.sh
+      working-directory: /github/workspace/ros_ws/src/navigation2_extensions/docker
+
+    - name: Build using script
+      run: ./build.sh
+      working-directory: /github/workspace/ros_ws/src/navigation2_extensions/docker
+
+    - name: Run tests
+      run: |
+        source /opt/ros/humble/setup.bash
+        colcon test --packages-select carma_nav2_behavior_tree carma_nav2_emergency_stop carma_nav2_port_drayage_demo
+        colcon test-result --verbose
+      working-directory: /github/workspace/ros_ws
+
+    - name: Run SonarScanner
+      uses: usdot-fhwa-stol/actions/sonar-scanner@main
+      with:
+        sonar-token: ${{ secrets.SONAR_TOKEN }}
+        working-dir: /github/workspace/ros_ws/src/navigation2_extensions
