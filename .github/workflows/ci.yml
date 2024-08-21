@@ -18,10 +18,11 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
+    
+    - run: ls -la && pwd
 
     - name: Clone Dep's
       run: |
-        ls -la && pwd
         git clone https://github.com/usdot-fhwa-stol/carma-msgs
         git clone -b nav2_route_server_humble https://github.com/usdot-fhwa-stol/navigation2
       working-directory: /__w/navigation2_extensions/navigation2_extensions/src  
