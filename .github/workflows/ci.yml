@@ -38,14 +38,14 @@ jobs:
       run: |
         source /opt/ros/humble/setup.bash
         colcon build --packages-select carma_nav2_behavior_tree carma_nav2_emergency_stop carma_nav2_port_drayage_demo
-      working-directory: /__w/navigation2_extensions/navigation2_extensions/src/navigation2_extensions 
+      working-directory: /__w/navigation2_extensions/navigation2_extensions/
 
     - name: Run tests
       run: |
         source /opt/ros/humble/setup.bash
         colcon test --packages-select carma_nav2_behavior_tree carma_nav2_emergency_stop carma_nav2_port_drayage_demo
         colcon test-result --verbose
-      working-directory: /__w/navigation2_extensions/navigation2_extensions/src/navigation2_extensions 
+      working-directory: /__w/navigation2_extensions/navigation2_extensions/
 
     - name: Run SonarScanner
       uses: usdot-fhwa-stol/actions/sonar-scanner@main
