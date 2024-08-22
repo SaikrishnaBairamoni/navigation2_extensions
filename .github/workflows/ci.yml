@@ -37,7 +37,8 @@ jobs:
     - name: Build 
       run: |
         . /opt/ros/humble/setup.sh
-        colcon build --packages-select carma_nav2_behavior_tree carma_nav2_emergency_stop carma_nav2_port_drayage_demo
+        #colcon build --packages-select carma_nav2_behavior_tree carma_nav2_emergency_stop carma_nav2_port_drayage_demo
+        colcon build --parallel-workers 4 --event-handlers console_direct+ --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_CXX_FLAGS="${COVERAGE_FLAGS}" -DCMAKE_C_FLAGS="${COVERAGE_FLAGS}" -DCMAKE_BUILD_TYPE="Debug"
       working-directory: /__w/navigation2_extensions/navigation2_extensions/
 
     - name: Run tests
