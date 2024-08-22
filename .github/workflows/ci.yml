@@ -36,13 +36,13 @@ jobs:
           
     - name: Build 
       run: |
-        source /opt/ros/humble/setup.bash
+        . /opt/ros/humble/setup.sh
         colcon build --packages-select carma_nav2_behavior_tree carma_nav2_emergency_stop carma_nav2_port_drayage_demo
       working-directory: /__w/navigation2_extensions/navigation2_extensions/
 
     - name: Run tests
       run: |
-        source /opt/ros/humble/setup.bash
+        . /opt/ros/humble/setup.sh
         colcon test --packages-select carma_nav2_behavior_tree carma_nav2_emergency_stop carma_nav2_port_drayage_demo
         colcon test-result --verbose
       working-directory: /__w/navigation2_extensions/navigation2_extensions/
