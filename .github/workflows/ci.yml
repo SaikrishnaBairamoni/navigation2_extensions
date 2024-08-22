@@ -36,17 +36,10 @@ jobs:
         rosdep update
         rosdep install --from-paths /__w/navigation2_extensions/navigation2_extensions/src --ignore-src --rosdistro=humble -y -r
       working-directory: /__w/navigation2_extensions/navigation2_extensions/src/navigation2_extensions
-    - name: Locate and Source setup.bash
+    - name: Find setup.bash
+      shell: bash
       run: |
-        SETUP_BASH=$(find /root/c1t_ws -name setup.bash)
-        if [[ -f "$SETUP_BASH" ]]; then
-          echo "Found setup.bash at $SETUP_BASH"
-          source "$SETUP_BASH"
-        else
-          echo "setup.bash not found."
-          exit 1
-        fi
-      shell: bash         
+        find "$GITHUB_WORKSPACE" -name "setup.bash"  
     # - name: Build 
     #   run: |
     #     . /opt/ros/humble/setup.sh
