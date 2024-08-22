@@ -36,10 +36,12 @@ jobs:
         rosdep update
         rosdep install --from-paths /__w/navigation2_extensions/navigation2_extensions/src --ignore-src --rosdistro=humble -y -r
       working-directory: /__w/navigation2_extensions/navigation2_extensions/src/navigation2_extensions
-    - name: Find setup.bash
-      shell: bash
+
+    - name: List install directory
       run: |
-        find "$GITHUB_WORKSPACE" -name "setup.bash"  
+        ls -la && pwd
+        ls -alh /root/c1t_ws/install/
+      shell: bash 
     # - name: Build 
     #   run: |
     #     . /opt/ros/humble/setup.sh
