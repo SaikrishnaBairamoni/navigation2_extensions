@@ -42,6 +42,10 @@ jobs:
         colcon build --parallel-workers 4 --event-handlers console_direct+ --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_CXX_FLAGS="${COVERAGE_FLAGS}" -DCMAKE_C_FLAGS="${COVERAGE_FLAGS}" -DCMAKE_BUILD_TYPE="Debug"
       working-directory: /__w/navigation2_extensions/navigation2_extensions/
 
+    - run: ls -la && pwd 
+    - run: cd install 
+    - run: ls -la && pwd 
+
     - name: Run tests
       run: |
         . /__w/navigation2_extensions/navigation2_extensions/install/setup.bash
