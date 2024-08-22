@@ -22,7 +22,19 @@ jobs:
       with:
         fetch-depth: 0
         path: src/${{ github.event.repository.name }}
+    - name: Setup Build Environment
+      run: |
+        mkdir -p /root/c1t_ws/src
+        cp -r $GITHUB_WORKSPACE/* /root/c1t_ws/src/
+        cd /root/c1t_ws
+      shell: bash        
 
+    - name: List install directory
+      run: |
+        ls -la && pwd
+        ls -alh /root/c1t_ws/install/
+      shell: bash 
+      
     - name: Clone Dep's
       run: |
         git clone https://github.com/usdot-fhwa-stol/carma-msgs
@@ -37,11 +49,8 @@ jobs:
         rosdep install --from-paths /__w/navigation2_extensions/navigation2_extensions/src --ignore-src --rosdistro=humble -y -r
       working-directory: /__w/navigation2_extensions/navigation2_extensions/src/navigation2_extensions
 
-    - name: List install directory
-      run: |
-        ls -la && pwd
-        ls -alh /root/c1t_ws/install/
-      shell: bash 
+
+
     # - name: Build 
     #   run: |
     #     . /opt/ros/humble/setup.sh
