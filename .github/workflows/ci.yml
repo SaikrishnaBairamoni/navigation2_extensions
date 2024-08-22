@@ -45,7 +45,10 @@ jobs:
     - run: ls -la && pwd 
     - run: cd install 
     - run: ls -la && pwd 
-
+    - name: Find setup.bash
+      shell: bash
+      run: |
+        find "/__w/navigation2_extensions/navigation2_extensions/" -name "setup.bash"
     - name: Run tests
       run: |
         . /__w/navigation2_extensions/navigation2_extensions/install/setup.bash
