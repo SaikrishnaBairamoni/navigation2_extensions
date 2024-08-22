@@ -30,8 +30,9 @@ jobs:
          
     - name: Install Ros dependencies
       run: |
-        chmod +x ./install_dependencies.sh
-        ./install_dependencies.sh
+        apt install -y libnanoflann-dev
+        rosdep update
+        rosdep install --from-paths /__w/navigation2_extensions/navigation2_extensions/src --ignore-src --rosdistro=humble -y -r
       working-directory: /__w/navigation2_extensions/navigation2_extensions/src/navigation2_extensions
           
     - name: Build 
