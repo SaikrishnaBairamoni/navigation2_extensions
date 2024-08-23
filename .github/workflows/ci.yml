@@ -71,7 +71,7 @@ jobs:
         sonar.projectName=navigation2_extensions
         sonar.projectVersion=1.0
         sonar.sourceEncoding=UTF-8
-        sonar.cfamily.build-wrapper-output=/__w/navigation2_extensions/navigation2_extensions/bw-output/build-wrapper-dump.json
+        sonar.cfamily.build-wrapper-output=/__w/navigation2_extensions/navigation2_extensions/bw-output
         sonar.cfamily.cache.enabled=false
         sonar.host.url=https://sonarcloud.io
         sonar.cpp.file.suffixes=.cpp,.h,.tpp
@@ -94,4 +94,4 @@ jobs:
       with:
         sonar-properties-path: /tmp/sonar-scanner.properties
         sonar-token: ${{ secrets.SONAR_TOKEN }}
-        working-dir: /__w/navigation2_extensions/navigation2_extensions/
+        working-dir: /__w/navigation2_extensions/navigation2_extensions/src/navigation2_extensions/
